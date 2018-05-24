@@ -15,10 +15,10 @@ class ConfigUtils(object):
              self.config.read(cfgFiles)
          except IOError,e:
              print  e
-     def getConf(self,section, option):
+     def getConf(self,section, option,defult=None):
          value = self.config.get(section, option)
          if(value is None or value.strip() == ''):
-             return None
+             return defult
          return value
      def getLogConfig(self):
          return  self.path  +"/log.json"
