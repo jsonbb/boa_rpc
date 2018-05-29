@@ -2,11 +2,10 @@
 
 from thrift.server.TServer import TServer
 from thrift.transport.TTransport import TTransportException
-import gevent
 from gevent.pool import Pool
 import gevent.monkey
-
 gevent.monkey.patch_all()
+
 from common.util_Log.logger import logging
 logger = logging.getLogger(__name__)
 

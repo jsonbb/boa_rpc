@@ -5,8 +5,7 @@ from boarpc.exception.exceptions import UnrealizedException
 
 class IProtocol:
 
-    def getRegisterPath(self):
-        return '/doa_rpc/%s' % config.getConf('app','app_name','')
+
     def getURL(self):
         '''get url'''
         raise UnrealizedException()
@@ -24,9 +23,9 @@ from boarpc.exception.exceptions import FatalError
 class ProtocolFactory:
 
     @staticmethod
-    def createProtocol(protocol):
+    def createProtocol(protocol,url=None):
          if 'thrift'== protocol:
-             return ThriftProtocol()
+             return ThriftProtocol(url)
          else:
              raise FatalError('Nonsupport protocol')
 

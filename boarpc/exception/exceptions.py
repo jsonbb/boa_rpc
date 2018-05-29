@@ -10,4 +10,4 @@ class  FatalError(Exception):
 
 class UnrealizedException(Exception):
     def __str__(self):
-        return 'Unrealized method'
+        return 'Unrealized method:' + self.message
