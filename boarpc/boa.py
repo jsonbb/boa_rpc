@@ -97,7 +97,8 @@ class MultiprocessBoa:
         #register to zk
         logger.info("-------register to zk--------")
         registry = RegistryFactory.createRegistry()
-        registry.registerAll(urlSet)
+        registry.urlSet = urlSet
+        registry.registerAll()
         for url in urlSet:
             logger.info(url)
         registry.PROVIDER_MD5 = registry.getProvideMD5()

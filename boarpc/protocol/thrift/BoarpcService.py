@@ -19,10 +19,10 @@ all_structs = []
 
 
 class Iface(object):
-    def dispatcher(self, client, moduleName, className, functionName, params):
+    def dispatcher(self, consumer, moduleName, className, functionName, params):
         """
         Parameters:
-         - client
+         - consumer
          - moduleName
          - className
          - functionName
@@ -38,22 +38,22 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def dispatcher(self, client, moduleName, className, functionName, params):
+    def dispatcher(self, consumer, moduleName, className, functionName, params):
         """
         Parameters:
-         - client
+         - consumer
          - moduleName
          - className
          - functionName
          - params
         """
-        self.send_dispatcher(client, moduleName, className, functionName, params)
+        self.send_dispatcher(consumer, moduleName, className, functionName, params)
         return self.recv_dispatcher()
 
-    def send_dispatcher(self, client, moduleName, className, functionName, params):
+    def send_dispatcher(self, consumer, moduleName, className, functionName, params):
         self._oprot.writeMessageBegin('dispatcher', TMessageType.CALL, self._seqid)
         args = dispatcher_args()
-        args.client = client
+        args.consumer = consumer
         args.moduleName = moduleName
         args.className = className
         args.functionName = functionName
@@ -105,16 +105,16 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = dispatcher_result()
         try:
-            result.success = self._handler.dispatcher(args.client, args.moduleName, args.className, args.functionName, args.params)
+            result.success = self._handler.dispatcher(args.consumer, args.moduleName, args.className, args.functionName, args.params)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
         except TApplicationException as ex:
-            logging.exception('TApplication exception in protocolImpl')
+            logging.exception('TApplication exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = ex
         except Exception:
-            logging.exception('Unexpected exception in protocolImpl')
+            logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("dispatcher", msg_type, seqid)
@@ -128,7 +128,7 @@ class Processor(Iface, TProcessor):
 class dispatcher_args(object):
     """
     Attributes:
-     - client
+     - consumer
      - moduleName
      - className
      - functionName
@@ -136,8 +136,8 @@ class dispatcher_args(object):
     """
 
 
-    def __init__(self, client=None, moduleName=None, className=None, functionName=None, params=None,):
-        self.client = client
+    def __init__(self, consumer=None, moduleName=None, className=None, functionName=None, params=None,):
+        self.consumer = consumer
         self.moduleName = moduleName
         self.className = className
         self.functionName = functionName
@@ -154,7 +154,7 @@ class dispatcher_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.client = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                    self.consumer = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -192,9 +192,9 @@ class dispatcher_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('dispatcher_args')
-        if self.client is not None:
-            oprot.writeFieldBegin('client', TType.STRING, 1)
-            oprot.writeString(self.client.encode('utf-8') if sys.version_info[0] == 2 else self.client)
+        if self.consumer is not None:
+            oprot.writeFieldBegin('consumer', TType.STRING, 1)
+            oprot.writeString(self.consumer.encode('utf-8') if sys.version_info[0] == 2 else self.consumer)
             oprot.writeFieldEnd()
         if self.moduleName is not None:
             oprot.writeFieldBegin('moduleName', TType.STRING, 2)
@@ -234,7 +234,7 @@ class dispatcher_args(object):
 all_structs.append(dispatcher_args)
 dispatcher_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'client', 'UTF8', None, ),  # 1
+    (1, TType.STRING, 'consumer', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'moduleName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'className', 'UTF8', None, ),  # 3
     (4, TType.STRING, 'functionName', 'UTF8', None, ),  # 4

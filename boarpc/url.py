@@ -26,7 +26,7 @@ class URL:
         self.process = p
 
     def getHostPort(self):
-        return "%s:%s" % (self.host,self.port)
+        return "%s:%s:%s" % (self.protocol,self.host,self.port)
 
 
     def __str__(self):
