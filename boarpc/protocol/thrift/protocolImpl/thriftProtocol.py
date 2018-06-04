@@ -16,8 +16,11 @@ logger = logging.getLogger(__name__)
 
 class ThriftProtocol(IProtocol):
 
-    def __init__(self):
-        self.url = URL('thrift',NetUtils.getIp(),NetUtils.getFreePort(),self.getRegisterPath())
+    def __init__(self,url=None):
+        if url is not None:
+            self.url = url
+        else:
+            self.url = URL('thrift',NetUtils.getIp(),NetUtils.getFreePort())
 
     def getURL(self):
         '''get url'''

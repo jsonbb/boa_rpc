@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class DispatcherHandler:
 
-    def dispatcher(self, client, moduleName, className, functionName, params):
+    def dispatcher(self, consumer, moduleName, className, functionName, params):
         """
         Parameters:
          - client
@@ -21,9 +21,12 @@ class DispatcherHandler:
          - params
         """
         start_time = time.time()
+        if moduleName == 'heart' and className=='ping':
+            return json.encode({'code':'pong'},encoding='utf-8')
+
         decode_leaves = map(lambda x: x.decode('utf-8'), params)
         interface_path = '.'.join([moduleName, className, functionName])
-        logger.info(u'客户端请求：%s，接口调用：%s' % (client, interface_path))
+        logger.info(u'客户端请求：%s，接口调用：%s' % (consumer, interface_path))
         # reload(__import__(root))
         cls = getattr(importlib.import_module(moduleName), className)
         if interface_path not in cls.INTERFACES:
