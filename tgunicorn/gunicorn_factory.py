@@ -19,13 +19,14 @@ class GunicornProtocol(object):
         from common.config.conf import config
         import multiprocessing
 
+
         handler = DispatcherHandler()
         app = BoarpcService.Processor(handler)
 
         bind = "%s:%s" % (NetUtils.getIp(), str(NetUtils.getFreePort()))
         options = {
             'worker_class' : 'thrift_gevent',
-            'thrift_protocol_factory' : 'thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory',
+            'thrift_protocol_factory' : 'thrift.protocol.TCompactProtocol:TCompactProtocolAcceleratedFactory',
             'thrift_transport_factory' : 'thrift.transport.TTransport:TBufferedTransportFactory',
             'service_register_cls' : 'tgunicorn.zk_process:ZkRigster',
             'bind': bind,
