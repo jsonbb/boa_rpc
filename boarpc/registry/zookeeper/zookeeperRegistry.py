@@ -21,7 +21,7 @@ class ZookeeperRegistry(Registry):
     def __init__(self):
         connectionRetry = KazooRetry(max_tries=-1)
         timeout = 60
-        self.zkClient = KazooClient(hosts='127.0.0.1:2181', timeout=timeout, connection_retry=connectionRetry)
+        self.zkClient = KazooClient(hosts=config.getConf('rpc', 'zk_host'), timeout=timeout, connection_retry=connectionRetry)
         self.zkClient.start(timeout=60)
         self.urlSet = set()
         signal.signal(signal.SIGINT, self.close)

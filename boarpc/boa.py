@@ -47,7 +47,7 @@ class MultiprocessBoa:
         :return:
         '''
         for filename in glob.glob(os.path.join(self.endpoint_path, r'*.py')):
-            moduleName = filename[filename.rindex('\\') + 1:filename.rindex('.')]
+            moduleName = filename[filename.rindex(os.sep) + 1:filename.rindex('.')]
             if '__init__' != moduleName:
                 __import__(moduleName)
         return Endpoint.INTERFACES
