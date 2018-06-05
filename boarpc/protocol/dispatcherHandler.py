@@ -33,7 +33,6 @@ class DispatcherHandler:
             raise NoFoundException()
         obj = cls()
         try:
-            decode_leaves.insert(0,obj)
             result = getattr(obj, functionName)(*decode_leaves)
             value = result if isinstance(result, basestring) else json.encode(result,encoding='utf-8')
             logger.info("%s take time : %f" % (functionName, time.time() - start_time))
