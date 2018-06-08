@@ -33,6 +33,7 @@ class GunicornProtocol(object):
             'workers': int(config.getConf('rpc', 'processes', multiprocessing.cpu_count())),
             'on_exit' : GunicornProtocol.on_exit,
             'daemon' : config.getConf('profiles', 'active', 'dev')=='prod',
+            'reuse-port' : True ,
         }
 
         return ThriftApplication(app,options)
