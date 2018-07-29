@@ -124,7 +124,13 @@ class MultiprocessBoa:
                     registry.register(url)
 
 
-
-
-
-
+import  platform
+from common.config.conf import config
+PROTOCOL = config.getConf('rpc', 'protocol', defult='thrift')
+def start():
+    os_name = platform.system()
+    if 'Windows' == os_name:
+        MultiprocessBoa().run()
+    else:
+        from boarpc.protocol.tgunicorn.gunicorn_factory import GunicornFactory
+        GunicornFactory.createGunicorn(PROTOCOL).run()
