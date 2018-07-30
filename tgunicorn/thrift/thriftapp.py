@@ -21,6 +21,8 @@ class ThriftApplication(Application):
     def __init__(self, app, options=None):
         self.options = options or {}
         self.thrift_app = app
+        self.endpoint_path = os.path.join(os.path.dirname(os.path.realpath(__file__)).replace('boarpc', ''), 'endpoint')
+        sys.path.insert(0, self.endpoint_path)
         super(ThriftApplication, self).__init__()
 
     def load_config(self):

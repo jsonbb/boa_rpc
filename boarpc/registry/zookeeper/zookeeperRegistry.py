@@ -1,19 +1,17 @@
 #encoding:utf-8
 
-import sys
 import signal
 
-
 from kazoo.client import KazooClient
-from kazoo.retry import KazooRetry
 from kazoo.client import KazooState
 from kazoo.exceptions import NodeExistsError
+from kazoo.retry import KazooRetry
 
-from boarpc.registry.registryService import Registry
 from boarpc.constants import Constants
-from common.utils.md5Utils import Md5Utils
+from boarpc.registry.registryService import Registry
 from common.config.conf import config
 from common.util_Log.logger import logging
+from common.utils.md5Utils import Md5Utils
 logger = logging.getLogger(__name__)
 
 class ZookeeperRegistry(Registry):
@@ -59,6 +57,12 @@ class ZookeeperRegistry(Registry):
         if providers is not None  :
             providers.sort()
             return Md5Utils.md5(''.join(providers))
+    def getAllProvides(self):
+        providers = self.zkClient.get_children(Constants.APP_REGISTER_PROVIDER_PATH)
+        if providers is None:
+            return set()
+        else:
+            return set(providers)
 
 
 

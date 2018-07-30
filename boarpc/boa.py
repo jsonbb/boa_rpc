@@ -101,16 +101,11 @@ class MultiprocessBoa:
         registry.registerAll()
         for url in urlSet:
             logger.info(url)
-        registry.PROVIDER_MD5 = registry.getProvideMD5()
         #monitor children process
         logger.info("-------monitor children process--------")
         while True:
             time.sleep(10)
-            flag = False
-            md5 = registry.getProvideMD5()
-            if registry.PROVIDER_MD5 != md5:
-                registry.PROVIDER_MD5 = md5
-                flag = True
+            providers = registry.getAllProvides()
             for url in urlSet:
                 p = url.process
                 logger.info('Run worker process (%s) status: %s' % (p.pid,p.is_alive()))
@@ -120,7 +115,8 @@ class MultiprocessBoa:
                     self.reStartWork(url)
                     time.sleep(5)
                     registry.register(url)
-                elif flag:
+                elif url.getHostPort() not in providers:
+                    #Re-register if lost in the registry
                     registry.register(url)
 
 

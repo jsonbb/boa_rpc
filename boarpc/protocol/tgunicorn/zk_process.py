@@ -31,14 +31,13 @@ class ZkRigster(object):
         registry.urlSet = urlSet
         registry.registerAll()
         logger.info(self.url)
-        registry.PROVIDER_MD5 = registry.getProvideMD5()
         # monitor children process
         while True:
             time.sleep(10)
-            md5 = registry.getProvideMD5()
-            if registry.PROVIDER_MD5 != md5:
-                registry.PROVIDER_MD5 = md5
-                registry.register(self.url)
+            providers = registry.getAllProvides()
+            if self.url.getHostPort() not in providers:
+                    # Re-register if lost in the registry
+                    registry.register(self.url)
 
     def register_instances(self):
         p = Process(target=self.run, args=())

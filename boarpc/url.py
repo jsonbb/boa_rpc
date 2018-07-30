@@ -9,7 +9,7 @@ class URL:
         self.protocol = protocol
         self.host = host
         self.port = port
-        self.path = '/doa_rpc/%s' % config.getConf('app', 'app_name', '')
+        self.path = '/doa_rpc/%s' % (config.getConf('app', 'app_name', ''))
         self.process = None
         self.endpoints = set()
 
