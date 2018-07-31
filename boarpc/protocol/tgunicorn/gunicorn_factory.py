@@ -12,7 +12,7 @@ class GunicornProtocol(object):
 
 
     def thrift(self):
-        from tgunicorn.thrift.thriftapp import ThriftApplication
+        from boarpc.protocol.tgunicorn.thrift.thriftapp import ThriftApplication
         from boarpc.protocol.thrift import BoarpcService
         from boarpc.protocol.dispatcherHandler import DispatcherHandler
         from common.utils.netUtils import NetUtils
