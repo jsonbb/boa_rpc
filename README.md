@@ -2,7 +2,8 @@ Boa_rpc
 ====
 Boa_rpc is based on the distributed RPC service framework developed by thrift (expandable to other protocols)
 
-##
+## Architecture
+![](https://github.com/jsonbb/boa_rpc/blob/master/image/boa_architecture.png)
 
 ## Feature
 -  the server automatically registers
